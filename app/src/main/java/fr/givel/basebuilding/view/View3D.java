@@ -2,18 +2,18 @@ package fr.givel.basebuilding.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import fr.givel.basebuilding.R;
 import fr.givel.basebuilding.controller.GameLoopThread;
 import fr.givel.basebuilding.model.World;
 
 /**
  * Created by lmg on 25/05/17.
+ * Displays a world from a given camera
  */
 
 public class View3D extends SurfaceView {
@@ -26,28 +26,34 @@ public class View3D extends SurfaceView {
 
     public View3D(Context context) {
         super(context);
-        gameLoopThread = new GameLoopThread(this);
+        initView();
+    }
+
+    public View3D(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        initView();
+    }
+
+    public View3D(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        initView();
+    }
+
+    public View3D(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        initView();
+    }
+
+    private void initView() {
         holder = getHolder();
         holder.addCallback(new SurfaceHolder.Callback() {
 
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {
-                boolean retry = true;
-                gameLoopThread.setRunning(false);
-                while (retry) {
-                    try {
-                        gameLoopThread.join();
-                        retry = false;
-                    } catch (InterruptedException e) {
-
-                    }
-                }
             }
 
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
-                gameLoopThread.setRunning(true);
-                gameLoopThread.start();
             }
 
             @Override
@@ -55,8 +61,6 @@ public class View3D extends SurfaceView {
                                        int width, int height) {
             }
         });
-
-        bmp = BitmapFactory.decodeResource(getResources(), R.drawable.boat);
     }
 
 
