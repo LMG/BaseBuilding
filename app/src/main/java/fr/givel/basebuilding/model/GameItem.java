@@ -10,4 +10,26 @@ import fr.givel.basebuilding.view.GameItemView;
 public class GameItem {
     Coordinate coordinate;
     GameItemView view;
+
+    public GameItem(Coordinate coordinate, GameItemView view) {
+        this.coordinate = coordinate;
+        this.view = view;
+        view.setItem(this);
+    }
+
+    public Coordinate getCoordinate() {
+        return coordinate;
+    }
+
+    public void setCoordinate(Coordinate coordinate) {
+        this.coordinate = coordinate;
+    }
+
+    public GameItemView getView() {
+        return view;
+    }
+
+    public void setView(GameItemView view) {
+        this.view = view;
+    }
 }

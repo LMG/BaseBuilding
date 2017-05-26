@@ -9,6 +9,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import fr.givel.basebuilding.controller.GameLoopThread;
+import fr.givel.basebuilding.model.GameItem;
 import fr.givel.basebuilding.model.World;
 
 /**
@@ -17,6 +18,7 @@ import fr.givel.basebuilding.model.World;
  */
 
 public class View3D extends SurfaceView {
+    private static final int MAX_LAYER = 256;
     Camera currentCamera;
 
     private Bitmap bmp;
@@ -44,6 +46,22 @@ public class View3D extends SurfaceView {
         initView();
     }
 
+    public Camera getCurrentCamera() {
+        return currentCamera;
+    }
+
+    public void setCurrentCamera(Camera currentCamera) {
+        this.currentCamera = currentCamera;
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public void setWorld(World world) {
+        this.world = world;
+    }
+
     private void initView() {
         holder = getHolder();
         holder.addCallback(new SurfaceHolder.Callback() {
@@ -66,7 +84,11 @@ public class View3D extends SurfaceView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawColor(Color.BLACK);
-        //for each du world .onDraw(canvas);
+        canvas.drawColor(Color.BLUE);
+        for (int i = 0; i < MAX_LAYER; i++) {
+            for (GameItem item : world.getGameItems()) {
+                item.getView().onDraw(canvas, i);
+            }
+        }
     }
 }

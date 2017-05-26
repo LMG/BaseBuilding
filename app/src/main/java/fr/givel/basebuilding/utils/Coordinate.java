@@ -8,6 +8,13 @@ public class Coordinate {
     /**
      * (0,0,0) = top left corner on lowest layer (for GameItemView as well as sprite)
      */
-    int x, y, z;
-    float rotation;
+    public int x, y, z;
+    public float rotation;
+
+    public Coordinate(int x, int y, int z, float rotation) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.rotation = rotation;
+    }
 }

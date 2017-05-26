@@ -1,5 +1,6 @@
 package fr.givel.basebuilding.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.givel.basebuilding.view.Camera;
@@ -12,4 +13,17 @@ import fr.givel.basebuilding.view.Camera;
 public class World {
     List<GameItem> gameItems;
     List<Camera> cameras;
+
+    public World(List<GameItem> gameItems, Camera camera) {
+        this.gameItems = gameItems;
+        this.cameras = new ArrayList<Camera>();
+    }
+
+    public List<GameItem> getGameItems() {
+        return gameItems;
+    }
+
+    public void setGameItems(List<GameItem> gameItems) {
+        this.gameItems = gameItems;
+    }
 }
