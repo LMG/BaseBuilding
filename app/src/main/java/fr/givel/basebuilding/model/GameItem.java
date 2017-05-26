@@ -14,7 +14,6 @@ public class GameItem {
     public GameItem(Coordinate coordinate, GameItemView view) {
         this.coordinate = coordinate;
         this.view = view;
-        view.setItem(this);
     }
 
     public Coordinate getCoordinate() {

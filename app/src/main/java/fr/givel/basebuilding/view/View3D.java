@@ -96,7 +96,7 @@ public class View3D extends SurfaceView {
         canvas.scale(currentCamera.getZoom(), currentCamera.getZoom());
         for (int i = 0; i < MAX_LAYER; i++) {
             for (GameItem item : world.getGameItems()) {
-                item.getView().onDraw(canvas, i, paint);
+                item.getView().onDraw(canvas, i, paint, item.getCoordinate());
             }
         }
         canvas.restore();
