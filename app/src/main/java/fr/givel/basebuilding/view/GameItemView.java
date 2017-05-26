@@ -5,9 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import fr.givel.basebuilding.utils.Coordinate;
 
 /**
@@ -16,16 +13,11 @@ import fr.givel.basebuilding.utils.Coordinate;
 
 public class GameItemView {
     private Bitmap bmp;
-    private List<List<Bitmap>> bitmapList;
-    private int xSize = 21, ySize = 11, zSize;
+    private int xSize, ySize, zSize;
     private Paint paint;
     private int distanceBetweenLayers = 1;
 
     public GameItemView(Bitmap bmp, int zSize) {
-        bitmapList = new ArrayList<>();
-        for (int i = 0; i < 360; i++) {
-            bitmapList.add(new ArrayList<Bitmap>());
-        }
         setBmp(bmp, zSize);
 
         paint = new Paint();
