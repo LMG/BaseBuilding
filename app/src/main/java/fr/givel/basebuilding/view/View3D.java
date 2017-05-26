@@ -6,6 +6,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -20,6 +22,7 @@ import fr.givel.basebuilding.model.World;
 
 public class View3D extends SurfaceView {
     private static final int MAX_LAYER = 256;
+    private static final String TAG = "view";
     Camera currentCamera;
 
     private Bitmap bmp;
@@ -28,6 +31,7 @@ public class View3D extends SurfaceView {
     private World world;
     private float scale = 10;
     private Paint paint;
+    private Surface surfaceHolder;
 
     public View3D(Context context) {
         super(context);
@@ -71,6 +75,7 @@ public class View3D extends SurfaceView {
 
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
+                setWillNotDraw(false);
             }
 
             @Override
@@ -90,6 +95,7 @@ public class View3D extends SurfaceView {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        Log.d(TAG, "begin " + System.currentTimeMillis());
 
         canvas.drawColor(Color.BLUE);
         canvas.save();
@@ -100,5 +106,7 @@ public class View3D extends SurfaceView {
             }
         }
         canvas.restore();
+
+        Log.d(TAG, "end " + System.currentTimeMillis());
     }
 }

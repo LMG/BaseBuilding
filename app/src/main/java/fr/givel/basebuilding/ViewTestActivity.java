@@ -33,8 +33,6 @@ public class ViewTestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_test);
         ButterKnife.bind(this);
 
-        gameLoopThread = new GameLoopThread(mainView);
-
         BitmapFactory.Options bitmapOpts = new BitmapFactory.Options();
         bitmapOpts.inPreferredConfig = Bitmap.Config.ARGB_8888;
         bitmapOpts.inScaled = false;
@@ -49,21 +47,24 @@ public class ViewTestActivity extends AppCompatActivity {
         GameItem boat2 = new GameItem(new Coordinate(45, 55, 0, 45), boatView);
 
         List<GameItem> itemList2 = new ArrayList<GameItem>();
-        itemList2.add(island);
         itemList2.add(boat);
+        itemList2.add(island);
         itemList2.add(boat2);
 
-        World w2 = new World(itemList2, new Camera(3));
+        World w2 = new World(itemList2, new Camera(10));
         mainView.setWorld(w2);
         mainView.initView();
 
         List<GameItem> itemList = new ArrayList<GameItem>();
         itemList.add(boat);
 
-        World w = new World(itemList, new Camera(4));
+        World w = new World(itemList, new Camera(10));
         altView1.setWorld(w);
         altView1.initView();
         altView2.setWorld(w);
         altView2.initView();
+
+        gameLoopThread = new GameLoopThread(mainView);
+        gameLoopThread.start();
     }
 }
