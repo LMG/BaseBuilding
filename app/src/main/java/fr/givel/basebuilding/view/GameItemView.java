@@ -22,18 +22,20 @@ public class GameItemView {
     private int pixelDensity = 4;
     private int distanceBetweenLayers = 2;
 
-    public GameItemView(Bitmap bmp) {
+    public GameItemView(Bitmap bmp, int zSize) {
         bitmapList = new ArrayList<>();
-        setBmp(bmp);
+        setBmp(bmp, zSize);
     }
 
     public Bitmap getBmp() {
         return bmp;
     }
 
-    public void setBmp(Bitmap bmp) {
+    public void setBmp(Bitmap bmp, int zSize) {
         this.bmp = bmp;
-        zSize = bmp.getWidth() / xSize;
+        this.zSize = zSize;
+        this.xSize = bmp.getWidth() / zSize;
+        this.ySize = bmp.getHeight();
 
         paint = new Paint();
         paint.setDither(false);
