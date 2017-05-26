@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        gameLoopThread = new GameLoopThread(mainView);
 
         BitmapFactory.Options bitmapOpts = new BitmapFactory.Options();
         bitmapOpts.inPreferredConfig = Bitmap.Config.ARGB_8888;
@@ -43,15 +42,15 @@ public class MainActivity extends AppCompatActivity {
         Bitmap islandBMP = BitmapFactory.decodeResource(getResources(), R.drawable.island, bitmapOpts);
 
         GameItemView islandView = new GameItemView(islandBMP, 14);
-        GameItem island = new GameItem(new Coordinate(10, 20, 0, 0), islandView);
+        GameItem island = new GameItem(new Coordinate(10, 20, 0, 45), islandView);
         GameItemView boatView = new GameItemView(boatBMP, 17);
         GameItemView boatView2 = new GameItemView(boatBMP, 17);
-        GameItem boat = new GameItem(new Coordinate(15, 15, 0, 0), boatView);
-        GameItem boat2 = new GameItem(new Coordinate(45, 55, 0, 0), boatView2);
+        GameItem boat = new GameItem(new Coordinate(15, 15, 0, 270), boatView);
+        GameItem boat2 = new GameItem(new Coordinate(45, 55, 0, 90), boatView2);
 
         List<GameItem> itemList2 = new ArrayList<GameItem>();
-        itemList2.add(island);
         itemList2.add(boat);
+        itemList2.add(island);
         itemList2.add(boat2);
 
         World w2 = new World(itemList2, new Camera(4));
@@ -66,5 +65,8 @@ public class MainActivity extends AppCompatActivity {
         altView1.initView();
         altView2.setWorld(w);
         altView2.initView();
+
+        gameLoopThread = new GameLoopThread(mainView);
+        gameLoopThread.start();
     }
 }

@@ -16,14 +16,17 @@ import fr.givel.basebuilding.utils.Coordinate;
 
 public class GameItemView {
     private Bitmap bmp;
-    private List<Bitmap> bitmapList;
+    private List<List<Bitmap>> bitmapList;
     private int xSize = 21, ySize = 11, zSize;
     private Paint paint;
-    private int pixelDensity = 4;
-    private int distanceBetweenLayers = 2;
+    private int pixelDensity = 6;
+    private int distanceBetweenLayers = 3;
 
     public GameItemView(Bitmap bmp, int zSize) {
         bitmapList = new ArrayList<>();
+        for (int i = 0; i < 360; i++) {
+            bitmapList.add(new ArrayList<Bitmap>());
+        }
         setBmp(bmp, zSize);
     }
 
@@ -56,7 +59,12 @@ public class GameItemView {
             Rect dst = new Rect(xDest, yDest, xDest + xSize, yDest + ySize);
             bmpCanvas.drawBitmap(bmp, src, dst, paint);
             bmpCanvas.restore();
-            bitmapList.add(bmpLayer);
+            bitmapList.get(i).add(bmpLayer); // the 0 rotation
+
+            //then we iterate over the rotations
+            for (int j = 0; j < 360; j++) {
+                bitmapList.get(i).add(rotatedLayer(bmpLayer, j));
+            }
         }
     }
 
@@ -83,7 +91,7 @@ public class GameItemView {
 
         // If it exists, draw it
         if (layerToDraw >= 0 && layerToDraw < zSize) {
-            Bitmap layerBitmap = rotatedLayer(bitmapList.get(layerToDraw), item.rotation);
+            Bitmap layerBitmap = bitmapList.get(layerToDraw).get(item.rotation);
 
             Rect src = new Rect(0, 0, layerBitmap.getWidth(), layerBitmap.getHeight());
 
