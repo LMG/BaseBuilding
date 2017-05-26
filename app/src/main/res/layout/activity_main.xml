@@ -5,38 +5,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="fr.givel.basebuilding.MainActivity">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-        <fr.givel.basebuilding.view.View3D
-            android:id="@+id/mainView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorWater" />
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-        <fr.givel.basebuilding.view.View3D
-            android:id="@+id/altView1"
-            android:background="@color/colorWater"
-            android:layout_height="match_parent"
-            android:layout_width="0dp"
-            android:layout_weight="1"/>
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/view3DTestButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="View3D test" />
 
-        <fr.givel.basebuilding.view.View3D
-            android:id="@+id/altView2"
-            android:background="@color/colorWater"
-            android:layout_height="match_parent"
-            android:layout_width="0dp"
-            android:layout_weight="1"/>
-    </LinearLayout>
-
-
-
-
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/gameTestButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Game test" />
 
 </LinearLayout>
