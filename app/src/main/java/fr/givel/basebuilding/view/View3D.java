@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -25,25 +26,23 @@ public class View3D extends SurfaceView {
     private SurfaceHolder holder;
     private GameLoopThread gameLoopThread;
     private World world;
+    private float scale = 10;
+    private Paint paint;
 
     public View3D(Context context) {
         super(context);
-        initView();
     }
 
     public View3D(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initView();
     }
 
     public View3D(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initView();
     }
 
     public View3D(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        initView();
     }
 
     public Camera getCurrentCamera() {
@@ -62,7 +61,7 @@ public class View3D extends SurfaceView {
         this.world = world;
     }
 
-    private void initView() {
+    public void initView() {
         holder = getHolder();
         holder.addCallback(new SurfaceHolder.Callback() {
 
@@ -79,16 +78,27 @@ public class View3D extends SurfaceView {
                                        int width, int height) {
             }
         });
+
+        paint = new Paint();
+        paint.setDither(false);
+        paint.setAntiAlias(false);
+
+        currentCamera = world.getCamera(0);
     }
 
 
     @Override
     protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
         canvas.drawColor(Color.BLUE);
+        canvas.save();
+        canvas.scale(currentCamera.getZoom(), currentCamera.getZoom());
         for (int i = 0; i < MAX_LAYER; i++) {
             for (GameItem item : world.getGameItems()) {
-                item.getView().onDraw(canvas, i);
+                item.getView().onDraw(canvas, i, paint);
             }
         }
+        canvas.restore();
     }
 }

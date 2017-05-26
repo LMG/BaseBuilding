@@ -8,5 +8,13 @@ import fr.givel.basebuilding.utils.Coordinate;
 
 public class Camera {
     Coordinate coordinate;
-    int zoomLevel;
+    private float zoom;
+
+    public Camera(float zoom) {
+        this.zoom = zoom;
+    }
+
+    public float getZoom() {
+        return zoom;
+    }
 }

@@ -17,7 +17,6 @@ import fr.givel.basebuilding.view.GameItemView;
 import fr.givel.basebuilding.view.View3D;
 
 public class MainActivity extends AppCompatActivity {
-
     private GameLoopThread gameLoopThread;
 
     @Override
@@ -30,14 +29,16 @@ public class MainActivity extends AppCompatActivity {
         BitmapFactory.Options bitmapOpts = new BitmapFactory.Options();
         bitmapOpts.inPreferredConfig = Bitmap.Config.ARGB_8888;
         bitmapOpts.inScaled = false;
+        bitmapOpts.inDither = false;
         Bitmap boatBMP = BitmapFactory.decodeResource(getResources(), R.drawable.boat, bitmapOpts);
 
-        GameItemView boatView = new GameItemView(Bitmap.createScaledBitmap(boatBMP, 3570, 110, false));
-        GameItem boat = new GameItem(new Coordinate(100, 100, 0, 0), boatView);
+        GameItemView boatView = new GameItemView(boatBMP);
+        GameItem boat = new GameItem(new Coordinate(10, 20, 0, 0), boatView);
         List<GameItem> itemList = new ArrayList<GameItem>();
         itemList.add(boat);
 
-        World w = new World(itemList, new Camera());
+        World w = new World(itemList, new Camera(30));
         mainView.setWorld(w);
+        mainView.initView();
     }
 }

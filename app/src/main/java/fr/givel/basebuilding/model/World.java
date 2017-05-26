@@ -17,6 +17,7 @@ public class World {
     public World(List<GameItem> gameItems, Camera camera) {
         this.gameItems = gameItems;
         this.cameras = new ArrayList<Camera>();
+        cameras.add(camera);
     }
 
     public List<GameItem> getGameItems() {
@@ -25,5 +26,9 @@ public class World {
 
     public void setGameItems(List<GameItem> gameItems) {
         this.gameItems = gameItems;
+    }
+
+    public Camera getCamera(int i) {
+        return cameras.get(0);
     }
 }
