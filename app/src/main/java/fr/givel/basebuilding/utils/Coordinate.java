@@ -18,6 +18,10 @@ public class Coordinate {
         this.rotation = rotation;
     }
 
+    public Coordinate() {
+        this(0, 0, 0, 0);
+    }
+
     public void setRotation(int rotation) {
         this.rotation = rotation;
     }
