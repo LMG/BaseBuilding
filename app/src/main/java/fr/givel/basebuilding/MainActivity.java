@@ -36,8 +36,9 @@ public class MainActivity extends AppCompatActivity {
         GameItem boat = new GameItem(new Coordinate(10, 20, 0, 0), boatView);
         List<GameItem> itemList = new ArrayList<GameItem>();
         itemList.add(boat);
+        boat.getCoordinate().setRotation(45);
 
-        World w = new World(itemList, new Camera(30));
+        World w = new World(itemList, new Camera(5));
         mainView.setWorld(w);
         mainView.initView();
     }
