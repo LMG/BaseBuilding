@@ -54,14 +54,14 @@ public class ViewTestActivity extends AppCompatActivity {
         itemList2.add(boat);
         itemList2.add(boat2);
 
-        World w2 = new World(itemList2, new Camera(15));
+        World w2 = new World(itemList2, new Camera(3));
         mainView.setWorld(w2);
         mainView.initView();
 
         List<GameItem> itemList = new ArrayList<GameItem>();
-        itemList.add(boat2);
+        itemList.add(boat);
 
-        World w = new World(itemList, new Camera(10));
+        World w = new World(itemList, new Camera(4));
         altView1.setWorld(w);
         altView1.initView();
         altView2.setWorld(w);
