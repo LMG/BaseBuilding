@@ -14,19 +14,21 @@ import fr.givel.basebuilding.model.GameItem;
 public class GameItemView {
     private Bitmap bmp;
     private GameItem item;
-    private int xSize = 21, ySize = 11, zSize;
+    private int xSize, ySize, zSize;
 
-    public GameItemView(Bitmap bmp) {
-        setBmp(bmp);
+    public GameItemView(Bitmap bmp, int zSize) {
+        setBmp(bmp, zSize);
     }
 
     public Bitmap getBmp() {
         return bmp;
     }
 
-    public void setBmp(Bitmap bmp) {
+    public void setBmp(Bitmap bmp, int zSize) {
         this.bmp = bmp;
-        zSize = bmp.getWidth() / xSize;
+        this.zSize = zSize;
+        this.xSize = bmp.getWidth() / zSize;
+        this.ySize = bmp.getHeight();
     }
 
     public GameItem getItem() {
@@ -42,8 +44,8 @@ public class GameItemView {
         int srcX = layerToDraw * xSize;
         int srcY = 0;
         Rect src = new Rect(srcX, srcY, srcX + xSize, srcY + ySize);
-        int x = item.getCoordinate().x;
-        int y = item.getCoordinate().y - worldLayer;
+        int x = this.item.getCoordinate().x;
+        int y = this.item.getCoordinate().y - worldLayer;
         Rect dst = new Rect(x, y, x + xSize, y + ySize);
         canvas.drawBitmap(bmp, src, dst, paint);
     }
