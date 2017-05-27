@@ -22,6 +22,13 @@ public class Coordinate {
         this(0, 0, 0, 0);
     }
 
+    public Coordinate(Coordinate coord) {
+        this.x = coord.x;
+        this.y = coord.y;
+        this.z = coord.z;
+        this.rotation = coord.rotation;
+    }
+
     public void setRotation(double rotation) {
         this.rotation = rotation;
     }
@@ -60,5 +67,15 @@ public class Coordinate {
      */
     public boolean vincinityOf(Coordinate c, int radius) {
         return ((Math.abs(c.x - x) < radius) && (Math.abs(c.y - y) < radius));
+    }
+
+    @Override
+    public String toString() {
+        return "Coordinate{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                ", rotation=" + rotation +
+                '}';
     }
 }

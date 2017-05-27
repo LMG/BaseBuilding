@@ -12,35 +12,40 @@ import fr.givel.basebuilding.utils.Vect2D;
 
 public class BoatBehaviour extends Behaviour {
     private final String TAG = "BoatBehaviour";
-    private double maxSpeed = 0.5;
-    private double maxAcceleration = 0.01;
+    private double maxSpeed = 1;
+    private double maxAcceleration = 0.05;
     private Coordinate lastCoord;
-    //private Vect2D movement;
     private Vect2D speed;
     private Vect2D acceleration;
     private Coordinate destination;
     private Coordinate start;
 
-    public BoatBehaviour() {
-        this.lastCoord = new Coordinate();
-        //this.movement = new Vect2D();
+    public BoatBehaviour(Coordinate coord, double maxSpeed, double acceleration) {
+        this.lastCoord = coord;
+        this.destination = new Coordinate(coord);
+
         this.speed = new Vect2D();
         this.acceleration = new Vect2D();
-        this.destination = new Coordinate(100, 100, 0, 0);
         this.start = new Coordinate(0, 0, 0, 0);
+        this.maxSpeed = maxSpeed;
+        this.maxAcceleration = acceleration;
+    }
+
+    public BoatBehaviour(Coordinate coord) {
+        this(coord, 1, 0.1);
     }
 
     @Override
     public Coordinate getNextCoordinate() {
         update();
 
-        Log.d(TAG, "" + lastCoord.x + " " + lastCoord.y + "spe" + speed + "acc" + acceleration);
+        //Log.d(TAG, "" + lastCoord.x + " " + lastCoord.y + "spe" + speed + "acc" + acceleration);
 
         return lastCoord;
     }
 
     public void update() {
-        if (!lastCoord.vincinityOf(destination, 10)) {
+        if (!lastCoord.vincinityOf(destination, 2)) {
             moveToPoint(destination);
         }
     }
@@ -65,15 +70,29 @@ public class BoatBehaviour extends Behaviour {
         trajToDo.sub(Vect2D.createCart(lastCoord.x, lastCoord.y));
         Log.d(TAG, "trajToDo " + trajToDo);
 
-        if (trajToDo.getLength() < traj.getLength() / 3) {
-            acceleration = Vect2D.createPolar(-maxAcceleration, trajToDo.getAngle());
-            Log.d(TAG, "trajend");
-        } else if (trajToDo.getLength() > 2 * (traj.getLength() / 3)) {
+
+        double decelerationTime = (speed.getLength() / acceleration.getLength());
+        double decelerationLength = decelerationTime * (decelerationTime + 1) / 2;
+
+        if (trajToDo.getLength() > decelerationLength) {
             acceleration = Vect2D.createPolar(maxAcceleration, trajToDo.getAngle());
-            Log.d(TAG, "trajbeg " + acceleration);
         } else {
-            acceleration.setLength(0);
-            Log.d(TAG, "trajmid");
+            acceleration = Vect2D.createPolar(-maxAcceleration, trajToDo.getAngle());
         }
+//        if (trajToDo.getLength() < traj.getLength() / 3) {
+//            acceleration = Vect2D.createPolar(-maxAcceleration, trajToDo.getAngle());
+//            Log.d(TAG, "trajend");
+//        } else if (trajToDo.getLength() > 2 * (traj.getLength() / 3)) {
+//            acceleration = Vect2D.createPolar(maxAcceleration, trajToDo.getAngle());
+//            Log.d(TAG, "trajbeg " + acceleration);
+//        } else {
+//            acceleration.setLength(0);
+//            Log.d(TAG, "trajmid");
+//        }
+        Log.d(TAG, "acceleration  " + acceleration);
+        Log.d(TAG, "vitesse  " + speed);
+        Log.d(TAG, "position  " + lastCoord);
+
+
     }
 }

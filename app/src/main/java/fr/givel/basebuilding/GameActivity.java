@@ -65,7 +65,8 @@ public class GameActivity extends AppCompatActivity {
                 int x = rand.nextInt(200);
                 int y = rand.nextInt(500);
                 int rot = rand.nextInt(360);
-                MovingGameItem boat = new MovingGameItem(new Coordinate(x, y, 0, rot), boatView, new BoatBehaviour());
+                Coordinate boatCoordinate = new Coordinate(x, y, 0, rot);
+                MovingGameItem boat = new MovingGameItem(boatCoordinate, boatView, new BoatBehaviour(boatCoordinate));
                 itemList.add(boat);
                 gameView.invalidate();
             }
