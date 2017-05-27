@@ -17,11 +17,15 @@ public class MovingGameItem extends GameItem {
         this.behaviour = behaviour;
     }
 
-    public void setBehaviour(Behaviour behaviour) {
-        this.behaviour = behaviour;
-    }
-
     public void updatePosition() {
         this.coordinate = behaviour.getNextCoordinate();
+    }
+
+    public Behaviour getBehaviour() {
+        return behaviour;
+    }
+
+    public void setBehaviour(Behaviour behaviour) {
+        this.behaviour = behaviour;
     }
 }

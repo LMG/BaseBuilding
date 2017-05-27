@@ -38,7 +38,7 @@ public class Vect2D {
     }
 
     public double getAngle() {
-        return Math.atan2(x, y);
+        return Math.atan2(y, x);
     }
 
     public void setAngle(double angle) {

@@ -1,17 +1,14 @@
 package fr.givel.basebuilding.view;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import fr.givel.basebuilding.controller.GameLoopThread;
 import fr.givel.basebuilding.model.GameItem;
 import fr.givel.basebuilding.model.World;
 
@@ -25,13 +22,9 @@ public class View3D extends SurfaceView {
     private static final String TAG = "view";
     Camera currentCamera;
 
-    private Bitmap bmp;
     private SurfaceHolder holder;
-    private GameLoopThread gameLoopThread;
     private World world;
-    private float scale = 10;
     private Paint paint;
-    private Surface surfaceHolder;
 
     public View3D(Context context) {
         super(context);

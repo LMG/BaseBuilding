@@ -68,7 +68,7 @@ public class GameActivity extends AppCompatActivity {
                 Coordinate boatCoordinate = new Coordinate(x, y, 0, rot);
                 MovingGameItem boat = new MovingGameItem(boatCoordinate, boatView, new BoatBehaviour(boatCoordinate));
                 itemList.add(boat);
-                gameView.invalidate();
+                ((BoatBehaviour) (boat.getBehaviour())).setDestination(new Coordinate(100, 100, 0, 0));
             }
         });
     }
