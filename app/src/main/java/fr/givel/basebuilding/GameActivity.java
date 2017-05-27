@@ -16,8 +16,8 @@ import butterknife.ButterKnife;
 import fr.givel.basebuilding.controller.GameLoopThread;
 import fr.givel.basebuilding.model.GameItem;
 import fr.givel.basebuilding.model.MovingGameItem;
-import fr.givel.basebuilding.model.TestBehaviour;
 import fr.givel.basebuilding.model.World;
+import fr.givel.basebuilding.model.behaviour.BoatBehaviour;
 import fr.givel.basebuilding.utils.Coordinate;
 import fr.givel.basebuilding.view.Camera;
 import fr.givel.basebuilding.view.GameItemView;
@@ -65,7 +65,7 @@ public class GameActivity extends AppCompatActivity {
                 int x = rand.nextInt(200);
                 int y = rand.nextInt(500);
                 int rot = rand.nextInt(360);
-                MovingGameItem boat = new MovingGameItem(new Coordinate(x, y, 0, rot), boatView, new TestBehaviour());
+                MovingGameItem boat = new MovingGameItem(new Coordinate(x, y, 0, rot), boatView, new BoatBehaviour());
                 itemList.add(boat);
                 gameView.invalidate();
             }

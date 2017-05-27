@@ -43,8 +43,8 @@ public class ViewTestActivity extends AppCompatActivity {
         GameItemView islandView = new GameItemView(islandBMP, 14);
         GameItem island = new GameItem(new Coordinate(10, 20, 0, 0), islandView);
         GameItemView boatView = new GameItemView(boatBMP, 17);
-        GameItem boat = new GameItem(new Coordinate(15, 15, 0, 90), boatView);
-        GameItem boat2 = new GameItem(new Coordinate(45, 55, 0, 45), boatView);
+        GameItem boat = new GameItem(new Coordinate(15, 15.5, 0, 0.5 * Math.PI), boatView);
+        GameItem boat2 = new GameItem(new Coordinate(15, 15, 0, 0.5 * Math.PI), boatView);
 
         List<GameItem> itemList2 = new ArrayList<GameItem>();
         itemList2.add(boat);
@@ -58,10 +58,11 @@ public class ViewTestActivity extends AppCompatActivity {
         List<GameItem> itemList = new ArrayList<GameItem>();
         itemList.add(boat);
 
-        World w = new World(itemList, new Camera(10));
+        World w = new World(itemList2, new Camera(10));
+        World w1 = new World(itemList2, new Camera(5));
         altView1.setWorld(w);
         altView1.initView();
-        altView2.setWorld(w);
+        altView2.setWorld(w1);
         altView2.initView();
 
         gameLoopThread = new GameLoopThread(mainView);

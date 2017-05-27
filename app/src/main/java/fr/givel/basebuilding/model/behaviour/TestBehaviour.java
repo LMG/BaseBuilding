@@ -1,4 +1,4 @@
-package fr.givel.basebuilding.model;
+package fr.givel.basebuilding.model.behaviour;
 
 import fr.givel.basebuilding.utils.Coordinate;
 
@@ -14,7 +14,7 @@ public class TestBehaviour extends Behaviour {
     }
 
     @Override
-    Coordinate getNextCoordinate() {
+    public Coordinate getNextCoordinate() {
         return new Coordinate(++(lastCoord.x), ++(lastCoord.y), 0, ++(lastCoord.rotation));
     }
 }

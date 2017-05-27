@@ -87,6 +87,7 @@ public class View3D extends SurfaceView {
         paint = new Paint();
         paint.setDither(false);
         paint.setAntiAlias(false);
+        paint.setFilterBitmap(false);
 
         currentCamera = world.getCamera(0);
     }
@@ -99,7 +100,8 @@ public class View3D extends SurfaceView {
 
         canvas.drawColor(Color.BLUE);
         canvas.save();
-        canvas.scale(currentCamera.getZoom(), currentCamera.getZoom());
+        //For subpixel positioning by making the zoom a float
+        canvas.scale(currentCamera.getZoom() * 1.0000001f, currentCamera.getZoom());
         for (int i = 0; i < MAX_LAYER; i++) {
             for (GameItem item : world.getGameItems()) {
                 item.getView().onDraw(canvas, i, paint, item.getCoordinate());

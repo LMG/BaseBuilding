@@ -1,5 +1,6 @@
 package fr.givel.basebuilding.model;
 
+import fr.givel.basebuilding.model.behaviour.Behaviour;
 import fr.givel.basebuilding.utils.Coordinate;
 import fr.givel.basebuilding.view.GameItemView;
 

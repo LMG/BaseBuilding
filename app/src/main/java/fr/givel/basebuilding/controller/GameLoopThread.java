@@ -14,7 +14,7 @@ public class GameLoopThread extends Thread {
     // desired fps
     private final static int MAX_FPS = 60;
     // maximum number of frames to be skipped
-    private final static int MAX_FRAME_SKIPS = 5;
+    private final static int MAX_FRAME_SKIPS = 50;
     // the frame period
     private final static int FRAME_PERIOD = 1000 / MAX_FPS;
     private boolean running;
