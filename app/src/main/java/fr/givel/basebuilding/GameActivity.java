@@ -28,6 +28,8 @@ public class GameActivity extends AppCompatActivity {
     View3D gameView;
     @BindView(R.id.addBoatButton)
     AppCompatButton addBoatButton;
+    @BindView(R.id.changeDestButton)
+    AppCompatButton changeDestButton;
 
     GameLoopThread gameLoopThread;
 
@@ -51,7 +53,7 @@ public class GameActivity extends AppCompatActivity {
         final List<GameItem> itemList = new ArrayList<GameItem>();
         itemList.add(island);
 
-        World world = new World(itemList, new Camera(3));
+        final World world = new World(itemList, new Camera(3));
         gameView.setWorld(world);
         gameView.initView();
 
@@ -68,8 +70,23 @@ public class GameActivity extends AppCompatActivity {
                 Coordinate boatCoordinate = new Coordinate(x, y, 0, rot);
                 MovingGameItem boat = new MovingGameItem(boatCoordinate, boatView, new BoatBehaviour(boatCoordinate));
                 itemList.add(boat);
-                ((BoatBehaviour) (boat.getBehaviour())).setDestination(new Coordinate(100, 100, 0, 0));
             }
         });
+
+        changeDestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Random rand = new Random();
+                int x = rand.nextInt(200);
+                int y = rand.nextInt(500);
+                Coordinate destCoordinate = new Coordinate(x, y, 0, 0);
+                GameItem boat2 = new GameItem(new Coordinate(destCoordinate), boatView);
+                itemList.add(boat2);
+                for (MovingGameItem m : world.getMovingItems()) {
+                    ((BoatBehaviour) (m.getBehaviour())).setDestination(destCoordinate);
+                }
+            }
+        });
+
     }
 }

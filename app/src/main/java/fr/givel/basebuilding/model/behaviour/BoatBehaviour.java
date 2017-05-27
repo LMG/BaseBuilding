@@ -9,7 +9,6 @@ import fr.givel.basebuilding.utils.Vect2D;
  */
 
 public class BoatBehaviour extends Behaviour {
-    private final String TAG = "BoatBehaviour";
     private double maxSpeed;
     private double maxAcceleration;
     private Coordinate lastCoord;
@@ -17,7 +16,8 @@ public class BoatBehaviour extends Behaviour {
     private Vect2D acceleration;
     private Coordinate destination;
     private Coordinate start;
-
+    private STATE state = STATE.IDLE;
+    ;
     public BoatBehaviour(Coordinate coord, double maxSpeed, double acceleration) {
         this.lastCoord = new Coordinate(coord);
         this.destination = new Coordinate(coord);
@@ -35,41 +35,56 @@ public class BoatBehaviour extends Behaviour {
 
     @Override
     public Coordinate getNextCoordinate() {
-        if (!lastCoord.vincinityOf(destination, 2)) {
-            moveToPoint(destination);
+        Vect2D trajToDo = Vect2D.createCart(lastCoord, destination);
+        switch (state) {
+            case IDLE:
+                break;
+            case ACCELERATING:
+                acceleration = Vect2D.createPolar(maxAcceleration, trajToDo.getAngle());
+                moveToPoint();
+
+                trajToDo = Vect2D.createCart(lastCoord, destination);
+                acceleration = Vect2D.createPolar(maxAcceleration, trajToDo.getAngle());
+                double decelerationTime = (speed.getLength() / maxAcceleration);
+                double decelerationLength = (decelerationTime * (decelerationTime + 1) * maxAcceleration / 2);
+
+                if (trajToDo.getLength() <= decelerationLength) {
+                    state = STATE.DECELERATING;
+                }
+                break;
+            case DECELERATING:
+                acceleration = Vect2D.createPolar(maxAcceleration, trajToDo.getAngle() + Math.PI);
+                moveToPoint();
+
+                trajToDo = Vect2D.createCart(lastCoord, destination);
+                if (trajToDo.getLength() <= 10) {
+                    state = STATE.IDLE;
+                    speed.setLength(0);
+                    acceleration.setLength(0);
+                }
+                break;
+            default:
+                break;
         }
         return lastCoord;
     }
 
-    public void moveToPoint(Coordinate destination) {
-        lastCoord.x += speed.getX();
-        lastCoord.y += speed.getY();
-        lastCoord.rotation = speed.getAngle();
-
+    public void moveToPoint() {
         speed.add(acceleration);
         if (speed.getLength() > maxSpeed) {
             speed.setLength(maxSpeed);
         }
 
-        Vect2D traj = Vect2D.createCart(destination.x, destination.y);
-        traj.sub(Vect2D.createCart(start.x, start.y));
-
-        Vect2D trajToDo = Vect2D.createCart(destination.x, destination.y);
-        trajToDo.sub(Vect2D.createCart(lastCoord.x, lastCoord.y));
-
-
-        double decelerationTime = (speed.getLength() / acceleration.getLength());
-        double decelerationLength = decelerationTime * (decelerationTime + 1) / 2;
-
-        if (trajToDo.getLength() > decelerationLength) {
-            acceleration = Vect2D.createPolar(maxAcceleration, trajToDo.getAngle());
-        } else {
-            acceleration = Vect2D.createPolar(-maxAcceleration, trajToDo.getAngle());
-        }
+        lastCoord.x += speed.getX();
+        lastCoord.y += speed.getY();
+        lastCoord.rotation = speed.getAngle();
     }
 
     public void setDestination(Coordinate dest) {
         this.destination = new Coordinate(dest);
         this.start = new Coordinate(lastCoord);
+        this.state = STATE.ACCELERATING;
     }
+
+    private enum STATE {IDLE, ACCELERATING, DECELERATING}
 }

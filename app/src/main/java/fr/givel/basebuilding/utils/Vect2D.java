@@ -17,6 +17,15 @@ public class Vect2D {
         return res;
     }
 
+    public static Vect2D createCart(Coordinate start, Coordinate end) {
+        Vect2D res = new Vect2D();
+
+        res.x = end.x - start.x;
+        res.y = end.y - start.y;
+
+        return res;
+    }
+
     public static Vect2D createCart(double x, double y) {
         Vect2D res = new Vect2D();
 

@@ -62,6 +62,10 @@ public class Coordinate {
         return result;
     }
 
+    public double planalDistanceTo(Coordinate c) {
+        return Math.sqrt((x - c.x) * (x - c.x) + (y - c.y) * (y - c.y));
+    }
+
     /*
      * Returns if it is around in a square of side radius
      */
