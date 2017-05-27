@@ -17,7 +17,7 @@ public class Vect2D {
         return res;
     }
 
-    public static Vect2D createCart(Coordinate start, Coordinate end) {
+    public static Vect2D createFromCoordinates(Coordinate start, Coordinate end) {
         Vect2D res = new Vect2D();
 
         res.x = end.x - start.x;

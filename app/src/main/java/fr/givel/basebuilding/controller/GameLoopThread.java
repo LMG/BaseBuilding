@@ -84,7 +84,7 @@ public class GameLoopThread extends Thread {
 
     private void updateModel() {
         for (MovingGameItem item : view.getWorld().getMovingItems()) {
-            item.updatePosition();
+            item.step();
         }
     }
 

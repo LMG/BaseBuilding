@@ -14,6 +14,7 @@ import java.util.Random;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.givel.basebuilding.controller.GameLoopThread;
+import fr.givel.basebuilding.model.Boat;
 import fr.givel.basebuilding.model.GameItem;
 import fr.givel.basebuilding.model.MovingGameItem;
 import fr.givel.basebuilding.model.World;
@@ -68,7 +69,8 @@ public class GameActivity extends AppCompatActivity {
                 int y = rand.nextInt(500);
                 int rot = rand.nextInt(360);
                 Coordinate boatCoordinate = new Coordinate(x, y, 0, rot);
-                MovingGameItem boat = new MovingGameItem(boatCoordinate, boatView, new BoatBehaviour(boatCoordinate));
+                Boat boat = new Boat(boatCoordinate, boatView);
+                boat.setBehaviour(new BoatBehaviour(boat));
                 itemList.add(boat);
             }
         });

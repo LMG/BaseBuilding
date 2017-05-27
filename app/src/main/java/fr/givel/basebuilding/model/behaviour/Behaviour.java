@@ -1,11 +1,17 @@
 package fr.givel.basebuilding.model.behaviour;
 
-import fr.givel.basebuilding.utils.Coordinate;
+import fr.givel.basebuilding.model.MovingGameItem;
 
 /**
  * Created by lmg on 27/05/17.
  */
 
 public abstract class Behaviour {
-    public abstract Coordinate getNextCoordinate();
+    protected MovingGameItem item;
+
+    public abstract void step();
+
+    public void setItem(MovingGameItem item) {
+        this.item = item;
+    }
 }

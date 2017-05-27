@@ -14,7 +14,7 @@ public class TestBehaviour extends Behaviour {
     }
 
     @Override
-    public Coordinate getNextCoordinate() {
-        return new Coordinate(++(lastCoord.x), ++(lastCoord.y), 0, ++(lastCoord.rotation));
+    public void step() {
+        item.setCoordinate(new Coordinate(++(lastCoord.x), ++(lastCoord.y), 0, ++(lastCoord.rotation)));
     }
 }
