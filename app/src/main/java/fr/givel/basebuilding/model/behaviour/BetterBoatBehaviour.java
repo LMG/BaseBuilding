@@ -50,9 +50,13 @@ public class BetterBoatBehaviour extends Behaviour {
                     state = STATE.ACCELERATING;
                     acceleration = new Vect2D();
                     break;
-                } else {
+                } else if (item.getSpeed().getLength() > 10) {
                     //TODO: turn using the correct side
                     acceleration = (new Vect2D(item.getSpeed())).turn(Math.PI / 2);
+                    break;
+                } else // if the speed is too slow, accelerate a little bit before turning
+                {
+                    acceleration = Vect2D.createPolar(item.getAcceleration(), item.getSpeed().getAngle());
                     break;
                 }
             case ACCELERATING://once we are facing the point, accelerate as much as we can
@@ -92,17 +96,14 @@ public class BetterBoatBehaviour extends Behaviour {
         Coordinate relativeCenterLeft = vectA.add(Vect2D.createPolar(turningRadius, item.getSpeed().getAngle() + Math.PI / 2)).toCoordinate();
         Coordinate relativeCenterRight = vectA.add(Vect2D.createPolar(turningRadius, item.getSpeed().getAngle() - Math.PI / 2)).toCoordinate();
 
-        if (Vect2D.createFromCoordinates(item.getCoordinate(), relativeCenterLeft).getLength() < turningRadius
-                || Vect2D.createFromCoordinates(item.getCoordinate(), relativeCenterRight).getLength() < turningRadius) {
-            return false;
-        }
+        return !(Vect2D.createFromCoordinates(item.getCoordinate(), relativeCenterLeft).getLength() < turningRadius
+                || Vect2D.createFromCoordinates(item.getCoordinate(), relativeCenterRight).getLength() < turningRadius);
 
-        return true;
     }
 
     public void setDestination(Coordinate dest) {
         this.destination = new Coordinate(dest);
-        this.state = STATE.ACCELERATING;
+        this.state = STATE.START;
     }
 
     private enum STATE {IDLE, START, MOVE, TURN, ACCELERATING, DECELERATING}

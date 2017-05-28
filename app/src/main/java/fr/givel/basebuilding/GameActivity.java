@@ -18,7 +18,7 @@ import fr.givel.basebuilding.model.Boat;
 import fr.givel.basebuilding.model.GameItem;
 import fr.givel.basebuilding.model.MovingGameItem;
 import fr.givel.basebuilding.model.World;
-import fr.givel.basebuilding.model.behaviour.BoatBehaviour;
+import fr.givel.basebuilding.model.behaviour.BetterBoatBehaviour;
 import fr.givel.basebuilding.utils.Coordinate;
 import fr.givel.basebuilding.view.Camera;
 import fr.givel.basebuilding.view.GameItemView;
@@ -70,7 +70,7 @@ public class GameActivity extends AppCompatActivity {
                 int rot = rand.nextInt(360);
                 Coordinate boatCoordinate = new Coordinate(x, y, 0, rot);
                 Boat boat = new Boat(boatCoordinate, boatView);
-                boat.setBehaviour(new BoatBehaviour(boat));
+                boat.setBehaviour(new BetterBoatBehaviour(boat));
                 itemList.add(boat);
             }
         });
@@ -85,7 +85,7 @@ public class GameActivity extends AppCompatActivity {
                 GameItem boat2 = new GameItem(new Coordinate(destCoordinate), boatView);
                 itemList.add(boat2);
                 for (MovingGameItem m : world.getMovingItems()) {
-                    ((BoatBehaviour) (m.getBehaviour())).setDestination(destCoordinate);
+                    ((BetterBoatBehaviour) (m.getBehaviour())).setDestination(destCoordinate);
                 }
             }
         });
