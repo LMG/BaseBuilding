@@ -42,7 +42,7 @@ public class BetterBoatBehaviour extends Behaviour {
                     state = STATE.TURN;
                     break;
                 } else {
-                    acceleration = Vect2D.createPolar(itemAcceleration, item.getSpeed().getAngle());
+                    acceleration = Vect2D.createPolar(itemAcceleration, item.getOrientation());
                     break;
                 }
             case TURN://we can reach the point, make sure we are facing the correct direction
@@ -56,7 +56,7 @@ public class BetterBoatBehaviour extends Behaviour {
                     break;
                 } else // if the speed is too slow, accelerate a little bit before turning
                 {
-                    acceleration = Vect2D.createPolar(item.getAcceleration(), item.getSpeed().getAngle());
+                    acceleration = Vect2D.createPolar(item.getAcceleration(), item.getOrientation());
                     break;
                 }
             case ACCELERATING://once we are facing the point, accelerate as much as we can

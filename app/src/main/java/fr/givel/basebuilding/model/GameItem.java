@@ -31,4 +31,8 @@ public class GameItem {
     public void setView(GameItemView view) {
         this.view = view;
     }
+
+    public double getOrientation() {
+        return coordinate.rotation;
+    }
 }
