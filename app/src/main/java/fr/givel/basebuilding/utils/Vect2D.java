@@ -8,6 +8,17 @@ public class Vect2D {
     private double x;
     private double y;
 
+
+    public Vect2D() {
+        this.x = 0;
+        this.y = 0;
+    }
+
+    public Vect2D(Vect2D v) {
+        this.x = v.x;
+        this.y = v.y;
+    }
+
     public static Vect2D createPolar(double length, double angle) {
         Vect2D res = new Vect2D();
 
@@ -74,9 +85,11 @@ public class Vect2D {
         this.y = y;
     }
 
-    public void add(Vect2D vect) {
+    public Vect2D add(Vect2D vect) {
         this.x += vect.x;
         this.y += vect.y;
+
+        return this;
     }
 
     public void sub(Vect2D vect) {
@@ -109,5 +122,17 @@ public class Vect2D {
         temp = Double.doubleToLongBits(y);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
+    }
+
+    public Coordinate toCoordinate() {
+        return new Coordinate(x, y, 0, 0);
+    }
+
+    public Vect2D turn(double angle) {
+        double length = getLength();
+        setAngle(this.getAngle() + angle);
+        setLength(length);
+
+        return this;
     }
 }
