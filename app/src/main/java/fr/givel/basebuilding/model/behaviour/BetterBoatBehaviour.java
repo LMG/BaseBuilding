@@ -16,7 +16,7 @@ public class BetterBoatBehaviour extends Behaviour {
     private final MovingGameItem item;
     private STATE state = STATE.IDLE;
     private Coordinate destination;
-    private double turnAngle = Math.PI / 4;
+    private double turnAngle = Math.PI / 180;
 
     public BetterBoatBehaviour(MovingGameItem item) {
         this.item = item;
@@ -49,13 +49,14 @@ public class BetterBoatBehaviour extends Behaviour {
                 }
             case TURN://we can reach the point, make sure we are facing the correct direction
                 Log.d(TAG, "TURN");
-                if (Vect2D.createFromCoordinates(item.getCoordinate(), destination).getAngle() == item.getSpeed().getAngle()) {
+                if (Vect2D.createFromCoordinates(item.getCoordinate(), destination).getAngle() > item.getSpeed().getAngle() - Math.PI / 180 &&
+                        Vect2D.createFromCoordinates(item.getCoordinate(), destination).getAngle() < item.getSpeed().getAngle() + Math.PI / 180) {
                     state = STATE.ACCELERATING;
                     acceleration = new Vect2D();
                     break;
                 } else if (item.getSpeed().getLength() > 0.1) {
                     //TODO: turn using the correct side
-                    acceleration = (new Vect2D(item.getSpeed())).turn(Math.PI / 2);
+                    acceleration = (new Vect2D(item.getSpeed())).turn(turnAngle).sub(item.getSpeed());
                     break;
                 } else // if the speed is too slow, accelerate a little bit before turning
                 {
@@ -77,7 +78,7 @@ public class BetterBoatBehaviour extends Behaviour {
             case DECELERATING://we are too close, we need to start slowing down
                 Log.d(TAG, "DECELERATING");
                 trajToDo = Vect2D.createFromCoordinates(itemCoordinate, destination);
-                acceleration = Vect2D.createPolar(itemAcceleration, trajToDo.getAngle() + Math.PI);
+                acceleration = Vect2D.createPolar(itemAcceleration, item.getSpeed().getAngle() + Math.PI);
 
                 if (trajToDo.getLength() <= 10) {
                     state = STATE.IDLE;

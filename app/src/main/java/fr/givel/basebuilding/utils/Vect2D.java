@@ -92,9 +92,11 @@ public class Vect2D {
         return this;
     }
 
-    public void sub(Vect2D vect) {
+    public Vect2D sub(Vect2D vect) {
         this.x -= vect.x;
         this.y -= vect.y;
+
+        return this;
     }
 
     public String toString() {
