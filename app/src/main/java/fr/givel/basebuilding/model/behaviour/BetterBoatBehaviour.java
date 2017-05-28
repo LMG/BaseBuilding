@@ -31,12 +31,14 @@ public class BetterBoatBehaviour extends Behaviour {
         Vect2D speed = item.getSpeed();
         switch (state) {
             case START: //see if we can reach the point
+                Log.d(TAG, "START");
                 if (canReach(destination))
                     state = STATE.TURN;
                 else if (!canReach(destination))
                     state = STATE.MOVE;
                 break;
             case MOVE: //we can't reach the point, move forward accelerating until we can
+                Log.d(TAG, "MOVE");
                 if (canReach(destination)) {
                     acceleration = new Vect2D();
                     state = STATE.TURN;
@@ -46,11 +48,12 @@ public class BetterBoatBehaviour extends Behaviour {
                     break;
                 }
             case TURN://we can reach the point, make sure we are facing the correct direction
+                Log.d(TAG, "TURN");
                 if (Vect2D.createFromCoordinates(item.getCoordinate(), destination).getAngle() == item.getSpeed().getAngle()) {
                     state = STATE.ACCELERATING;
                     acceleration = new Vect2D();
                     break;
-                } else if (item.getSpeed().getLength() > 10) {
+                } else if (item.getSpeed().getLength() > 0.1) {
                     //TODO: turn using the correct side
                     acceleration = (new Vect2D(item.getSpeed())).turn(Math.PI / 2);
                     break;
@@ -60,6 +63,7 @@ public class BetterBoatBehaviour extends Behaviour {
                     break;
                 }
             case ACCELERATING://once we are facing the point, accelerate as much as we can
+                Log.d(TAG, "ACCELERATING");
                 trajToDo = Vect2D.createFromCoordinates(itemCoordinate, destination);
                 acceleration = Vect2D.createPolar(itemAcceleration, item.getSpeed().getAngle());
 
@@ -71,6 +75,7 @@ public class BetterBoatBehaviour extends Behaviour {
                 }
                 break;
             case DECELERATING://we are too close, we need to start slowing down
+                Log.d(TAG, "DECELERATING");
                 trajToDo = Vect2D.createFromCoordinates(itemCoordinate, destination);
                 acceleration = Vect2D.createPolar(itemAcceleration, trajToDo.getAngle() + Math.PI);
 
@@ -82,6 +87,7 @@ public class BetterBoatBehaviour extends Behaviour {
                 break;
             case IDLE:
             default:
+                Log.d(TAG, "IDLE");
                 acceleration = new Vect2D();
                 break;
         }
