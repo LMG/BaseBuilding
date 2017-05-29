@@ -111,9 +111,13 @@ public class BetterBoatBehaviour extends Behaviour {
         item.computeMovement(acceleration);
     }
 
+    /*
+     * Can we reach the coordinate if we turn at max speed
+     */
     private boolean canReach(Coordinate c) {
-        double turningRadius = -item.getSpeed().getLength() * Math.sin(turnAngle) / (4 * Math.pow(Math.sin(turnAngle / 2), 2));
-        Log.d(TAG, "speed " + item.getSpeed().getLength() + "turnAngle " + turnAngle + "turnradius " + turningRadius);
+        double speed = item.getMaxSpeed();
+        double turningRadius = -speed * Math.sin(turnAngle) / (4 * Math.pow(Math.sin(turnAngle / 2), 2));
+        Log.d(TAG, "speed " + speed + "turnAngle " + turnAngle + "turnradius " + turningRadius);
         Vect2D vectA = (new Vect2D(item.getSpeed())).add(Vect2D.createCart(item.getSpeed().getX() / 2, item.getSpeed().getY() / 2));
         Coordinate relativeCenterLeft = vectA.add(Vect2D.createPolar(turningRadius, item.getSpeed().getAngle() + Math.PI / 2)).toCoordinate();
         Coordinate relativeCenterRight = vectA.add(Vect2D.createPolar(turningRadius, item.getSpeed().getAngle() - Math.PI / 2)).toCoordinate();
@@ -128,10 +132,6 @@ public class BetterBoatBehaviour extends Behaviour {
         this.state = STATE.START;
     }
 
-    private double compareAngles(double a, double b) {
-        return Math.atan2(Math.sin(b - a), Math.cos(b - a));
-    }
-
     /*
      * returns a signed angled that is the smallest angle from a to b.
      *
@@ -141,6 +141,9 @@ public class BetterBoatBehaviour extends Behaviour {
      * @param a a source angle of any value
      * @param b a destination angle of any value
      */
+    private double compareAngles(double a, double b) {
+        return Math.atan2(Math.sin(b - a), Math.cos(b - a));
+    }
 
     private enum STATE {IDLE, START, MOVE, TURN, ACCELERATING, DECELERATING}
 }
