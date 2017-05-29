@@ -57,4 +57,8 @@ public class MovingGameItem extends GameItem {
     public void step() {
         behaviour.step();
     }
+
+    public double getMaxSpeed() {
+        return maxSpeed;
+    }
 }

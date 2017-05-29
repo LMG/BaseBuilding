@@ -16,10 +16,13 @@ public class BetterBoatBehaviour extends Behaviour {
     private final MovingGameItem item;
     private STATE state = STATE.IDLE;
     private Coordinate destination;
-    private double turnAngle = Math.PI / 180;
+    private double turnAngle = Math.PI / 18;
+    private double correctionLength;
 
     public BetterBoatBehaviour(MovingGameItem item) {
         this.item = item;
+        correctionLength = 10 * item.getMaxSpeed();
+        destination = new Coordinate();
     }
 
     @Override
@@ -29,6 +32,10 @@ public class BetterBoatBehaviour extends Behaviour {
         Vect2D acceleration = new Vect2D();
         double itemAcceleration = item.getAcceleration();
         Vect2D speed = item.getSpeed();
+        double destAngle = Vect2D.createFromCoordinates(item.getCoordinate(), destination).getAngle();
+        double turnAngle = this.turnAngle * speed.getLength() / item.getMaxSpeed();
+        double angleToDest = compareAngles(item.getSpeed().getAngle(), destAngle);
+
         switch (state) {
             case START: //see if we can reach the point
                 Log.d(TAG, "START");
@@ -49,20 +56,23 @@ public class BetterBoatBehaviour extends Behaviour {
                 }
             case TURN://we can reach the point, make sure we are facing the correct direction
                 Log.d(TAG, "TURN");
-                if (Vect2D.createFromCoordinates(item.getCoordinate(), destination).getAngle() > item.getSpeed().getAngle() - Math.PI / 180 &&
-                        Vect2D.createFromCoordinates(item.getCoordinate(), destination).getAngle() < item.getSpeed().getAngle() + Math.PI / 180) {
+
+                //if we're facing in the correct direction, go to ACCELERATE and stop turning
+                if (angleToDest >= -turnAngle / 2 &&
+                        angleToDest <= turnAngle / 2) {
                     state = STATE.ACCELERATING;
                     acceleration = new Vect2D();
-                    break;
-                } else if (item.getSpeed().getLength() > 0.1) {
-                    //TODO: turn using the correct side
-                    acceleration = (new Vect2D(item.getSpeed())).turn(turnAngle).sub(item.getSpeed());
-                    break;
-                } else // if the speed is too slow, accelerate a little bit before turning
-                {
-                    acceleration = Vect2D.createPolar(item.getAcceleration(), item.getOrientation());
-                    break;
+                } else {
+                    Log.d(TAG, "Orientation " + item.getSpeed().getAngle() * 360 / (2 * Math.PI) + " destAngle " + destAngle * 360 / (2 * Math.PI));
+                    if (compareAngles(item.getSpeed().getAngle(), destAngle) < 0) {
+                        acceleration = (new Vect2D(item.getSpeed())).turn(-turnAngle).sub(item.getSpeed());
+                    } else {
+                        acceleration = (new Vect2D(item.getSpeed())).turn(turnAngle).sub(item.getSpeed());
+                    }
+                    // accelerate while turning
+                    acceleration.add(Vect2D.createPolar(item.getAcceleration(), item.getOrientation()));
                 }
+                break;
             case ACCELERATING://once we are facing the point, accelerate as much as we can
                 Log.d(TAG, "ACCELERATING");
                 trajToDo = Vect2D.createFromCoordinates(itemCoordinate, destination);
@@ -71,6 +81,11 @@ public class BetterBoatBehaviour extends Behaviour {
                 double decelerationTime = (speed.getLength() / itemAcceleration);
                 double decelerationLength = (decelerationTime * (decelerationTime + 1) * itemAcceleration / 2);
 
+                if (trajToDo.getLength() <= correctionLength
+                        && (angleToDest >= turnAngle / 2 ||
+                        angleToDest <= -turnAngle / 2)) {
+                    state = STATE.TURN;
+                }
                 if (trajToDo.getLength() <= decelerationLength) {
                     state = STATE.DECELERATING;
                 }
@@ -112,6 +127,20 @@ public class BetterBoatBehaviour extends Behaviour {
         this.destination = new Coordinate(dest);
         this.state = STATE.START;
     }
+
+    private double compareAngles(double a, double b) {
+        return Math.atan2(Math.sin(b - a), Math.cos(b - a));
+    }
+
+    /*
+     * returns a signed angled that is the smallest angle from a to b.
+     *
+     * Note: costly, see https://stackoverflow.com/questions/1878907/the-smallest-difference-between-2-angles for smarter solutions
+     *
+     * @returns signed angle between -PI and PI
+     * @param a a source angle of any value
+     * @param b a destination angle of any value
+     */
 
     private enum STATE {IDLE, START, MOVE, TURN, ACCELERATING, DECELERATING}
 }
