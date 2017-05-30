@@ -1,17 +1,14 @@
 package fr.givel.basebuilding.view;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import fr.givel.basebuilding.controller.GameLoopThread;
 import fr.givel.basebuilding.model.GameItem;
 import fr.givel.basebuilding.model.World;
 
@@ -25,13 +22,9 @@ public class View3D extends SurfaceView {
     private static final String TAG = "view";
     Camera currentCamera;
 
-    private Bitmap bmp;
     private SurfaceHolder holder;
-    private GameLoopThread gameLoopThread;
     private World world;
-    private float scale = 10;
     private Paint paint;
-    private Surface surfaceHolder;
 
     public View3D(Context context) {
         super(context);
@@ -87,6 +80,7 @@ public class View3D extends SurfaceView {
         paint = new Paint();
         paint.setDither(false);
         paint.setAntiAlias(false);
+        paint.setFilterBitmap(false);
 
         currentCamera = world.getCamera(0);
     }
@@ -99,7 +93,13 @@ public class View3D extends SurfaceView {
 
         canvas.drawColor(Color.BLUE);
         canvas.save();
-        canvas.scale(currentCamera.getZoom(), currentCamera.getZoom());
+
+        Paint black = new Paint();
+        black.setColor(Color.BLACK);
+        black.setStyle(Paint.Style.FILL);
+
+        //For subpixel positioning by making the zoom a float
+        canvas.scale(currentCamera.getZoom() * 1.0000001f, currentCamera.getZoom());
         for (int i = 0; i < MAX_LAYER; i++) {
             for (GameItem item : world.getGameItems()) {
                 item.getView().onDraw(canvas, i, paint, item.getCoordinate());

@@ -13,8 +13,12 @@ import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import fr.givel.basebuilding.controller.GameLoopThread;
+import fr.givel.basebuilding.model.Boat;
 import fr.givel.basebuilding.model.GameItem;
+import fr.givel.basebuilding.model.MovingGameItem;
 import fr.givel.basebuilding.model.World;
+import fr.givel.basebuilding.model.behaviour.BetterBoatBehaviour;
 import fr.givel.basebuilding.utils.Coordinate;
 import fr.givel.basebuilding.view.Camera;
 import fr.givel.basebuilding.view.GameItemView;
@@ -25,7 +29,10 @@ public class GameActivity extends AppCompatActivity {
     View3D gameView;
     @BindView(R.id.addBoatButton)
     AppCompatButton addBoatButton;
+    @BindView(R.id.changeDestButton)
+    AppCompatButton changeDestButton;
 
+    GameLoopThread gameLoopThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +54,12 @@ public class GameActivity extends AppCompatActivity {
         final List<GameItem> itemList = new ArrayList<GameItem>();
         itemList.add(island);
 
-        World world = new World(itemList, new Camera(3));
+        final World world = new World(itemList, new Camera(3));
         gameView.setWorld(world);
         gameView.initView();
 
+        gameLoopThread = new GameLoopThread(gameView);
+        gameLoopThread.start();
 
         addBoatButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,10 +68,27 @@ public class GameActivity extends AppCompatActivity {
                 int x = rand.nextInt(200);
                 int y = rand.nextInt(500);
                 int rot = rand.nextInt(360);
-                GameItem boat = new GameItem(new Coordinate(x, y, 0, rot), boatView);
+                Coordinate boatCoordinate = new Coordinate(x, y, 0, rot);
+                Boat boat = new Boat(boatCoordinate, boatView);
+                boat.setBehaviour(new BetterBoatBehaviour(boat));
                 itemList.add(boat);
-                gameView.invalidate();
             }
         });
+
+        changeDestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Random rand = new Random();
+                int x = rand.nextInt(200);
+                int y = rand.nextInt(500);
+                Coordinate destCoordinate = new Coordinate(x, y, 0, 0);
+                GameItem boat2 = new GameItem(new Coordinate(destCoordinate), boatView);
+                itemList.add(boat2);
+                for (MovingGameItem m : world.getMovingItems()) {
+                    ((BetterBoatBehaviour) (m.getBehaviour())).setDestination(destCoordinate);
+                }
+            }
+        });
+
     }
 }

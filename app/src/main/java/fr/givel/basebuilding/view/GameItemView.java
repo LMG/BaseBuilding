@@ -38,16 +38,16 @@ public class GameItemView {
 
     public void onDraw(Canvas canvas, int worldLayer, Paint paint, Coordinate item) {
         // The layer of the object we need to draw
-        int layerToDraw = worldLayer - item.z;
+        int layerToDraw = worldLayer - (int) item.z;
 
         // If it exists, draw it
         if (layerToDraw >= 0 && layerToDraw < zSize) {
 
-            int x = item.x;
-            float y = item.y - worldLayer * distanceBetweenLayers / 4;
+            float x = (float) item.x;
+            float y = (float) (item.y - worldLayer * distanceBetweenLayers / 4);
 
             Matrix transform = new Matrix();
-            transform.preRotate(item.rotation, xSize / 2, ySize / 2);
+            transform.preRotate((float) Math.toDegrees(item.rotation), xSize / 2, ySize / 2);
             transform.postTranslate(x, y);
 
             canvas.drawBitmap(Bitmap.createBitmap(bmp, layerToDraw * xSize, 0, xSize, ySize), transform, paint);

@@ -2,8 +2,7 @@ package fr.givel.basebuilding.controller;
 
 import android.graphics.Canvas;
 
-import fr.givel.basebuilding.model.GameItem;
-import fr.givel.basebuilding.utils.Coordinate;
+import fr.givel.basebuilding.model.MovingGameItem;
 import fr.givel.basebuilding.view.View3D;
 
 /**
@@ -15,18 +14,13 @@ public class GameLoopThread extends Thread {
     // desired fps
     private final static int MAX_FPS = 60;
     // maximum number of frames to be skipped
-    private final static int MAX_FRAME_SKIPS = 5;
+    private final static int MAX_FRAME_SKIPS = 50;
     // the frame period
     private final static int FRAME_PERIOD = 1000 / MAX_FPS;
     private boolean running;
-    private int rotation;
     private View3D view;
-    private Coordinate coord;
 
     public GameLoopThread(View3D view) {
-        GameItem boat = view.getWorld().getGameItems().get(0);
-        coord = boat.getCoordinate();
-        rotation = 0;
         this.view = view;
     }
 
@@ -89,8 +83,9 @@ public class GameLoopThread extends Thread {
     }
 
     private void updateModel() {
-        rotation = (rotation + 1) % 360;
-        coord.setRotation(rotation);
+        for (MovingGameItem item : view.getWorld().getMovingItems()) {
+            item.step();
+        }
     }
 
     public void setRunning(boolean running) {

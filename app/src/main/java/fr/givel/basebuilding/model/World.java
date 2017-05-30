@@ -31,4 +31,14 @@ public class World {
     public Camera getCamera(int i) {
         return cameras.get(0);
     }
+
+    public List<MovingGameItem> getMovingItems() {
+        List<MovingGameItem> movingGameItemList = new ArrayList<>();
+        for (GameItem g :
+                gameItems) {
+            if (g instanceof MovingGameItem)
+                movingGameItemList.add((MovingGameItem) g);
+        }
+        return movingGameItemList;
+    }
 }
