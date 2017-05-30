@@ -93,6 +93,11 @@ public class View3D extends SurfaceView {
 
         canvas.drawColor(Color.BLUE);
         canvas.save();
+
+        Paint black = new Paint();
+        black.setColor(Color.BLACK);
+        black.setStyle(Paint.Style.FILL);
+
         //For subpixel positioning by making the zoom a float
         canvas.scale(currentCamera.getZoom() * 1.0000001f, currentCamera.getZoom());
         for (int i = 0; i < MAX_LAYER; i++) {

@@ -62,7 +62,11 @@ public class BetterBoatBehaviour extends Behaviour {
                         angleToDest <= turnAngle / 2) {
                     state = STATE.ACCELERATING;
                     acceleration = new Vect2D();
-                } else {
+                }
+                else if(!canReach(destination)){
+                    state = STATE.MOVE;
+                }
+                else {
                     Log.d(TAG, "Orientation " + item.getSpeed().getAngle() * 360 / (2 * Math.PI) + " destAngle " + destAngle * 360 / (2 * Math.PI));
                     if (compareAngles(item.getSpeed().getAngle(), destAngle) < 0) {
                         acceleration = (new Vect2D(item.getSpeed())).turn(-turnAngle).sub(item.getSpeed());
@@ -115,15 +119,22 @@ public class BetterBoatBehaviour extends Behaviour {
      * Can we reach the coordinate if we turn at max speed
      */
     private boolean canReach(Coordinate c) {
-        double speed = item.getMaxSpeed();
-        double turningRadius = -speed * Math.sin(turnAngle) / (4 * Math.pow(Math.sin(turnAngle / 2), 2));
+        double speed = item.getSpeed().getLength()+item.getAcceleration();
+        double turningRadius = speed * Math.sin(turnAngle) / (4 * Math.pow(Math.sin(turnAngle / 2), 2));
         Log.d(TAG, "speed " + speed + "turnAngle " + turnAngle + "turnradius " + turningRadius);
-        Vect2D vectA = (new Vect2D(item.getSpeed())).add(Vect2D.createCart(item.getSpeed().getX() / 2, item.getSpeed().getY() / 2));
-        Coordinate relativeCenterLeft = vectA.add(Vect2D.createPolar(turningRadius, item.getSpeed().getAngle() + Math.PI / 2)).toCoordinate();
-        Coordinate relativeCenterRight = vectA.add(Vect2D.createPolar(turningRadius, item.getSpeed().getAngle() - Math.PI / 2)).toCoordinate();
 
-        return !(Vect2D.createFromCoordinates(item.getCoordinate(), relativeCenterLeft).getLength() < turningRadius
-                || Vect2D.createFromCoordinates(item.getCoordinate(), relativeCenterRight).getLength() < turningRadius);
+        Vect2D vectA = (Vect2D.createCart(item.getSpeed().getX() / 2, item.getSpeed().getY() / 2).turn(Math.PI));
+        Coordinate relativeCenterLeft = vectA.add(Vect2D.createPolar(turningRadius, item.getOrientation() - Math.PI / 2))
+                .add(Vect2D.createCart(item.getCoordinate().x, item.getCoordinate().y))
+                .toCoordinate();
+        Coordinate relativeCenterRight = vectA.add(Vect2D.createPolar(turningRadius, item.getOrientation() + Math.PI / 2))
+                .add(Vect2D.createCart(item.getCoordinate().x, item.getCoordinate().y))
+                .toCoordinate();
+
+        Log.d(TAG, "" + turningRadius);
+
+        return (Vect2D.createFromCoordinates(destination, relativeCenterLeft).getLength() > turningRadius
+                && Vect2D.createFromCoordinates(destination, relativeCenterRight).getLength() > turningRadius);
 
     }
 
