@@ -65,6 +65,7 @@ public class BetterBoatBehaviour extends Behaviour {
                 }
                 else if(!canReach(destination)){
                     state = STATE.MOVE;
+                    acceleration = new Vect2D();
                 }
                 else {
                     Log.d(TAG, "Orientation " + item.getSpeed().getAngle() * 360 / (2 * Math.PI) + " destAngle " + destAngle * 360 / (2 * Math.PI));
@@ -119,7 +120,7 @@ public class BetterBoatBehaviour extends Behaviour {
      * Can we reach the coordinate if we turn at max speed
      */
     private boolean canReach(Coordinate c) {
-        double speed = item.getSpeed().getLength()+item.getAcceleration();
+        double speed = item.getMaxSpeed();//item.getSpeed().getLength()+item.getAcceleration();
         double turningRadius = speed * Math.sin(turnAngle) / (4 * Math.pow(Math.sin(turnAngle / 2), 2));
         Log.d(TAG, "speed " + speed + "turnAngle " + turnAngle + "turnradius " + turningRadius);
 

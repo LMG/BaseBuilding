@@ -88,6 +88,7 @@ public class View3D extends SurfaceView {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        Log.d(TAG, "canvas.ishardwareaccelerated: " + canvas.isHardwareAccelerated());
         super.onDraw(canvas);
         Log.d(TAG, "begin " + System.currentTimeMillis());
 

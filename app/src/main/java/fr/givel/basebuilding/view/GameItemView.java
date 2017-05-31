@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Rect;
 
 import fr.givel.basebuilding.utils.Coordinate;
 
@@ -49,8 +50,12 @@ public class GameItemView {
             Matrix transform = new Matrix();
             transform.preRotate((float) Math.toDegrees(item.rotation), xSize / 2, ySize / 2);
             transform.postTranslate(x, y);
-
-            canvas.drawBitmap(Bitmap.createBitmap(bmp, layerToDraw * xSize, 0, xSize, ySize), transform, paint);
+            Bitmap bmpToDraw = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
+            Canvas bmpCanvas = new Canvas(bmpToDraw);
+            Rect src = new Rect(layerToDraw * xSize, 0, (layerToDraw+1) * xSize, ySize);
+            Rect tgt = new Rect(0, 0, xSize, ySize);
+            bmpCanvas.drawBitmap(bmp, src, tgt, paint);
+            canvas.drawBitmap(bmpToDraw, transform, paint);
         }
     }
 }
