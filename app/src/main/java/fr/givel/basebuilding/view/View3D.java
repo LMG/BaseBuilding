@@ -1,13 +1,17 @@
 package fr.givel.basebuilding.view;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.WindowManager;
 
 import fr.givel.basebuilding.model.GameItem;
 import fr.givel.basebuilding.model.World;
@@ -25,6 +29,7 @@ public class View3D extends SurfaceView {
     private SurfaceHolder holder;
     private World world;
     private Paint paint;
+    private DisplayMetrics metrics;
 
     public View3D(Context context) {
         super(context);
@@ -58,7 +63,7 @@ public class View3D extends SurfaceView {
         this.world = world;
     }
 
-    public void initView() {
+    public void initView(Context c) {
         holder = getHolder();
         holder.addCallback(new SurfaceHolder.Callback() {
 
@@ -83,6 +88,10 @@ public class View3D extends SurfaceView {
         paint.setFilterBitmap(false);
 
         currentCamera = world.getCamera(0);
+
+        metrics = new DisplayMetrics();
+        WindowManager wm = (WindowManager) c.getSystemService(Context.WINDOW_SERVICE);
+        wm.getDefaultDisplay().getMetrics(metrics);
     }
 
 
@@ -93,20 +102,26 @@ public class View3D extends SurfaceView {
         Log.d(TAG, "begin " + System.currentTimeMillis());
 
         canvas.drawColor(Color.BLUE);
-        canvas.save();
 
         Paint black = new Paint();
         black.setColor(Color.BLACK);
         black.setStyle(Paint.Style.FILL);
 
-        //For subpixel positioning by making the zoom a float
-        canvas.scale(currentCamera.getZoom() * 1.0000001f, currentCamera.getZoom());
+        //We'll draw everything on a small screen then blow it up
+        Bitmap smallScreen = Bitmap.createBitmap(
+                (int) (metrics.widthPixels / currentCamera.getZoom()),
+                (int) (metrics.heightPixels / currentCamera.getZoom()),
+                Bitmap.Config.ARGB_8888);
+        Canvas smallCanvas = new Canvas(smallScreen);
+
         for (int i = 0; i < MAX_LAYER; i++) {
             for (GameItem item : world.getGameItems()) {
-                item.getView().onDraw(canvas, i, paint, item.getCoordinate());
+                item.getView().onDraw(smallCanvas, i, paint, item.getCoordinate());
             }
         }
-        canvas.restore();
+        Matrix scale = new Matrix();
+        scale.setScale(currentCamera.getZoom(), currentCamera.getZoom());
+        canvas.drawBitmap(smallScreen, scale, paint);
 
         Log.d(TAG, "end " + System.currentTimeMillis());
     }

@@ -53,7 +53,7 @@ public class ViewTestActivity extends AppCompatActivity {
 
         World w2 = new World(itemList2, new Camera(10));
         mainView.setWorld(w2);
-        mainView.initView();
+        mainView.initView(getApplicationContext());
 
         List<GameItem> itemList = new ArrayList<GameItem>();
         itemList.add(boat);
@@ -61,9 +61,9 @@ public class ViewTestActivity extends AppCompatActivity {
         World w = new World(itemList2, new Camera(10));
         World w1 = new World(itemList2, new Camera(5));
         altView1.setWorld(w);
-        altView1.initView();
+        altView1.initView(getApplicationContext());
         altView2.setWorld(w1);
-        altView2.initView();
+        altView2.initView(getApplicationContext());
 
         gameLoopThread = new GameLoopThread(mainView);
         gameLoopThread.start();

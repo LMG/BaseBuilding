@@ -56,7 +56,7 @@ public class GameActivity extends AppCompatActivity {
 
         final World world = new World(itemList, new Camera(3));
         gameView.setWorld(world);
-        gameView.initView();
+        gameView.initView(getApplicationContext());
 
         gameLoopThread = new GameLoopThread(gameView);
         gameLoopThread.start();
